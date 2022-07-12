@@ -12,7 +12,23 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
-      - name: fetch
+      - name: deploy-key
+        env:
+          PARENT_CHILD1_KEY: ${{ secrets.PARENT_CHILD1_KEY }}
+        run: |
+          echo "$PARENT_CHILD1_KEY" > ~/parent_child1_key.pem
+          chmod 600 ~/parent_child1_key.pem
+
+      - name: subtree push child1
+        env:
+          GIT_SSH_COMMAND: ssh -i ~/parent_child1_key.pem -o StrictHostKeyChecking=no -F /dev/null
         run: |
           git fetch git@github.com:tokujiros/subtree-test-child1.git
-          git fetch git@github.com:tokujiros/subtree-test-child2.git
+          echo git subtree push --prefix=child1 git@github.com:tokujiros/subtree-test-child1.git master
+
+      - name: subtree push child2
+        env:
+          GIT_SSH_COMMAND: ssh -i ~/parent_child2_key.pem -o StrictHostKeyChecking=no -F /dev/null
+        run: |
+          echo git fetch git@github.com:tokujiros/subtree-test-child2.git
+          echo git subtree push --prefix=child2 git@github.com:tokujiros/subtree-test-child2.git master
