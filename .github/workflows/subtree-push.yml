@@ -1,0 +1,16 @@
+name: Subtree Push
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  subtree-push:
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: fetch
+        run: |
+          git fetch git@github.com:tokujiros/subtree-test-child1.git
+          git fetch git@github.com:tokujiros/subtree-test-child2.git
