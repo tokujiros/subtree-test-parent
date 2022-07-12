@@ -23,8 +23,9 @@ jobs:
         env:
           GIT_SSH_COMMAND: ssh -i ~/parent_child1_key.pem -o StrictHostKeyChecking=no -F /dev/null
         run: |
-          git fetch git@github.com:tokujiros/subtree-test-child1.git
-          echo git subtree push --prefix=child1 git@github.com:tokujiros/subtree-test-child1.git master
+          git remote add child1 git@github.com:tokujiros/subtree-test-child1.git
+          git fetch child1
+          git subtree push --prefix=child1 child1 master
 
       - name: subtree push child2
         env:
